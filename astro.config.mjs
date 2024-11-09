@@ -8,8 +8,11 @@ import react from '@astrojs/react'
 export default defineConfig({
   integrations: [
     starlight({
-      title: 'CiberPrendePixel',
+      title: 'Pixel',
       customCss: ['./src/styles/custom.css'],
+      components: {
+        Hero: './src/components/Main.astro',
+      },
       social: {
         github: 'https://github.com/igrisdev/ciberaprendepixel.git',
       },

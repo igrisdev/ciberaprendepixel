@@ -154,6 +154,7 @@ export const Quiz = () => {
 
   return (
     <div className='quiz-container'>
+      <span className='quiz-span'>Pruebate</span>
       <div className='quiz-header'>
         <h2 className='quiz-title'>
           Pregunta {currentQuestionIndex + 1} de {shuffledQuestions.length}
