@@ -126,12 +126,10 @@ export const Quiz = () => {
     setSelectedOption(selected)
     setIsAnswered(true)
 
-    // Verificar si la respuesta es correcta
     if (selected === shuffledQuestions[currentQuestionIndex].answer) {
       setScore(score + 1)
     }
 
-    // Esperar un segundo antes de avanzar a la siguiente pregunta
     setTimeout(() => {
       const nextQuestionIndex = currentQuestionIndex + 1
       if (nextQuestionIndex < shuffledQuestions.length) {
@@ -149,16 +147,20 @@ export const Quiz = () => {
         setCurrentQuestionIndex(0)
         setScore(0)
       }
-      setSelectedOption(null) // Resetear la selección
-      setIsAnswered(false) // Resetear el estado de respuesta
+      setSelectedOption(null)
+      setIsAnswered(false)
     }, 1000)
   }
 
   return (
     <div className='quiz-container'>
-      <h2 className='quiz-title'>
-        Pregunta {currentQuestionIndex + 1} de {shuffledQuestions.length}
-      </h2>
+      <div className='quiz-header'>
+        <h2 className='quiz-title'>
+          Pregunta {currentQuestionIndex + 1} de {shuffledQuestions.length}
+        </h2>
+
+        <p className='quiz-score'>Puntos: {score}</p>
+      </div>
       <h3 className='quiz-question'>
         {shuffledQuestions[currentQuestionIndex].question}
       </h3>
@@ -181,8 +183,6 @@ export const Quiz = () => {
           </button>
         ))}
       </div>
-
-      <p className='quiz-score'>Puntuación actual: {score}</p>
     </div>
   )
 }
