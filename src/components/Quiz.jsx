@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const shuffleArray = array => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -111,8 +111,7 @@ const questions = [
   },
 ]
 
-const Quiz = () => {
-  // Mezclar preguntas al inicio
+export const Quiz = () => {
   const [shuffledQuestions, setShuffledQuestions] = useState(
     shuffleArray([...questions])
   )
@@ -142,8 +141,7 @@ const Quiz = () => {
         }/${shuffledQuestions.length}.`
       )
 
-      // Reiniciar el juego
-      setShuffledQuestions(shuffleArray([...questions])) // Mezclar nuevamente
+      setShuffledQuestions(shuffleArray([...questions]))
       setCurrentQuestionIndex(0)
       setScore(0)
     }
@@ -168,5 +166,3 @@ const Quiz = () => {
     </div>
   )
 }
-
-export default Quiz
