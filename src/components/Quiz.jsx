@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import '../styles/components.css'
+
 const shuffleArray = array => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
@@ -115,54 +117,72 @@ export const Quiz = () => {
   const [shuffledQuestions, setShuffledQuestions] = useState(
     shuffleArray([...questions])
   )
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [score, setScore] = useState(0)
+  const [selectedOption, setSelectedOption] = useState(null)
+  const [isAnswered, setIsAnswered] = useState(false)
 
-  const selectAnswer = selectedOption => {
-    if (selectedOption === shuffledQuestions[currentQuestionIndex].answer) {
+  const selectAnswer = selected => {
+    setSelectedOption(selected)
+    setIsAnswered(true)
+
+    // Verificar si la respuesta es correcta
+    if (selected === shuffledQuestions[currentQuestionIndex].answer) {
       setScore(score + 1)
-      alert('¡Correcto!')
-    } else {
-      alert('Incorrecto, intenta nuevamente.')
     }
 
-    const nextQuestionIndex = currentQuestionIndex + 1
-
-    if (nextQuestionIndex < shuffledQuestions.length) {
-      setCurrentQuestionIndex(nextQuestionIndex)
-    } else {
-      alert(
-        `Juego terminado. Tu puntuación final es ${
-          score +
-          (selectedOption === shuffledQuestions[currentQuestionIndex].answer
-            ? 1
-            : 0)
-        }/${shuffledQuestions.length}.`
-      )
-
-      setShuffledQuestions(shuffleArray([...questions]))
-      setCurrentQuestionIndex(0)
-      setScore(0)
-    }
+    // Esperar un segundo antes de avanzar a la siguiente pregunta
+    setTimeout(() => {
+      const nextQuestionIndex = currentQuestionIndex + 1
+      if (nextQuestionIndex < shuffledQuestions.length) {
+        setCurrentQuestionIndex(nextQuestionIndex)
+      } else {
+        alert(
+          `Juego terminado. Tu puntuación final es ${
+            score +
+            (selected === shuffledQuestions[currentQuestionIndex].answer
+              ? 1
+              : 0)
+          }/${shuffledQuestions.length}.`
+        )
+        setShuffledQuestions(shuffleArray([...questions]))
+        setCurrentQuestionIndex(0)
+        setScore(0)
+      }
+      setSelectedOption(null) // Resetear la selección
+      setIsAnswered(false) // Resetear el estado de respuesta
+    }, 1000)
   }
 
   return (
-    <div>
-      <h2>
+    <div className='quiz-container'>
+      <h2 className='quiz-title'>
         Pregunta {currentQuestionIndex + 1} de {shuffledQuestions.length}
       </h2>
-      <h3>{shuffledQuestions[currentQuestionIndex].question}</h3>
+      <h3 className='quiz-question'>
+        {shuffledQuestions[currentQuestionIndex].question}
+      </h3>
 
-      <div>
+      <div className='quiz-options'>
         {shuffledQuestions[currentQuestionIndex].options.map(option => (
-          <button key={option} onClick={() => selectAnswer(option)}>
+          <button
+            key={option}
+            className={`quiz-option-button ${
+              isAnswered
+                ? option === shuffledQuestions[currentQuestionIndex].answer
+                  ? 'correct'
+                  : 'incorrect'
+                : ''
+            } ${selectedOption === option ? 'selected' : ''}`}
+            onClick={() => selectAnswer(option)}
+            disabled={isAnswered} // Deshabilitar los botones después de responder
+          >
             {option}
           </button>
         ))}
       </div>
 
-      <p>Puntuación actual: {score}</p>
+      <p className='quiz-score'>Puntuación actual: {score}</p>
     </div>
   )
 }
